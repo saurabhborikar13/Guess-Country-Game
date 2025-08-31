@@ -40,32 +40,32 @@ def play_game():
         
         # Check win condition
         if '-' not in display_word:
-            print("\n🎉 Congratulations! You guessed the country:", word.capitalize())
+            print("\nCongratulations! You guessed the country:", word.capitalize())
             break
         
         # Check lose condition
         if len(wrong_guesses) >= max_attempts:
-            print("\n❌ Game over! The country was:", word.capitalize())
+            print("\nGame over! The country was:", word.capitalize())
             break
 
         # Ask for input
         guess = input("Enter a letter: ").lower().strip()
         
         if len(guess) != 1 or not guess.isalpha():
-            print("⚠️ Please enter a single alphabet letter.")
+            print("Please enter a single alphabet letter.")
             continue
 
         if guess in guessed or guess in wrong_guesses:
-            print("⚠️ You already tried that letter.")
+            print("You already tried that letter.")
             continue
 
         # Check guess
         if guess in word:
             guessed.add(guess)
-            print("✅ Good guess!")
+            print("Good guess!")
         else:
             wrong_guesses.add(guess)
-            print("❌ Wrong guess!")
+            print("Wrong guess!")
 
 if __name__ == "__main__":
     play_game()

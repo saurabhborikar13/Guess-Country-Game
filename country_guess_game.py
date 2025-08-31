@@ -1,64 +1,71 @@
 import csv
 import random
 
-def read_countries_from_csv(filename):
+# Step 1: Load countries from CSV
+def load_countries(file_path="countries.csv"):
     countries = []
-    with open(filename, newline='', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            # Assuming country names are in first column; adjust if needed
-            countries.append(row[0].strip())
+    try:
+        with open(file_path, newline='', encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                countries.append(row["country"].strip())
+    except Exception as e:
+        print(f"Error reading CSV: {e}")
     return countries
 
-def display_word(word, guessed_letters):
-    display = ""
-    for letter in word:
-        if letter.lower() in guessed_letters:
-            display += letter
-        else:
-            display += "-"
-    return display
+# Step 2: Pick a random country
+def pick_random_country(countries):
+    return random.choice(countries).lower()
 
-def play_game(filename):
-    countries = read_countries_from_csv(filename)
+# Step 3: Play the word-guessing game
+def play_game():
+    countries = load_countries()
     if not countries:
-        print("No countries found in the CSV file.")
+        print("No countries found in CSV. Please check your file!")
         return
 
-    secret_word = random.choice(countries)
-    guessed_letters = set()
-    wrong_guesses = 0
-    max_wrong = 5
+    word = pick_random_country(countries)
+    guessed = set()
+    wrong_guesses = set()
+    max_attempts = 5
 
-    print("Welcome to the Country Guessing Game!")
+    print("Welcome to the Country Word Guessing Game! 🌍")
+    print(f"Guess the country name! You have {max_attempts} wrong attempts allowed.\n")
+
     while True:
-        print("Word: ", display_word(secret_word, guessed_letters))
-        guess = input("Guess a letter: ").lower()
+        # Show current state of the word
+        display_word = ''.join([letter if letter in guessed else '-' for letter in word])
+        print(f"Word: {display_word}")
+        print(f"Wrong guesses: {', '.join(wrong_guesses)}")
+        
+        # Check win condition
+        if '-' not in display_word:
+            print("\n🎉 Congratulations! You guessed the country:", word.capitalize())
+            break
+        
+        # Check lose condition
+        if len(wrong_guesses) >= max_attempts:
+            print("\n❌ Game over! The country was:", word.capitalize())
+            break
 
+        # Ask for input
+        guess = input("Enter a letter: ").lower().strip()
+        
         if len(guess) != 1 or not guess.isalpha():
-            print("Please guess a single letter.")
+            print("⚠️ Please enter a single alphabet letter.")
             continue
 
-        if guess in guessed_letters:
-            print("You already guessed that letter.")
+        if guess in guessed or guess in wrong_guesses:
+            print("⚠️ You already tried that letter.")
             continue
 
-        guessed_letters.add(guess)
-
-        if guess not in secret_word.lower():
-            wrong_guesses += 1
-            print(f"Wrong guess! {max_wrong - wrong_guesses} guesses left.")
+        # Check guess
+        if guess in word:
+            guessed.add(guess)
+            print("✅ Good guess!")
         else:
-            print("Good guess!")
-
-        if all(letter.lower() in guessed_letters or not letter.isalpha() for letter in secret_word):
-            print("Congratulations! You guessed the country:", secret_word)
-            break
-
-        if wrong_guesses >= max_wrong:
-            print("Sorry, you've run out of guesses. The country was:", secret_word)
-            break
+            wrong_guesses.add(guess)
+            print("❌ Wrong guess!")
 
 if __name__ == "__main__":
-    # Replace 'countries.csv' with the actual CSV filename containing country names
-    play_game("countries.csv")
+    play_game()

@@ -18,7 +18,7 @@ def load_countries(file_path="countries.csv"):
 def pick_random_country(countries):
     return random.choice(countries).lower()
 
-#Play the word-guessing game
+#Playing the word-huess game
 def play_game():
     countries = load_countries()
     if not countries:
@@ -60,7 +60,7 @@ def play_game():
             print("You already tried that letter.")
             continue
 
-        # Check guess
+        # Check guessing
         if guess in word:
             guessed.add(guess)
             print("Good guess!")

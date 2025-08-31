@@ -1,5 +1,6 @@
 import csv
 import random
+# Random word selection logic placeholder
 
 # Step 1: Load countries from CSV
 def load_countries(file_path="countries.csv"):

@@ -2,7 +2,7 @@ import csv
 import random
 # Random word selection logic placeholder
 
-# Step 1: Load countries from CSV
+# Load countries from CSV
 def load_countries(file_path="countries.csv"):
     countries = []
     try:
@@ -14,11 +14,11 @@ def load_countries(file_path="countries.csv"):
         print(f"Error reading CSV: {e}")
     return countries
 
-# Step 2: Pick a random country
+#pick random country naame
 def pick_random_country(countries):
     return random.choice(countries).lower()
 
-# Step 3: Play the word-guessing game
+#Play the word-guessing game
 def play_game():
     countries = load_countries()
     if not countries:
